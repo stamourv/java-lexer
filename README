@@ -1,6 +1,7 @@
 Java Lexer, for use with Scribble
 uses profj
 based on code from Ben Lerner
+can also do JavaScript in a pinch
 
 To use:
 @(require java/code)

@@ -2,3 +2,12 @@ Java Lexer, for use with Scribble
 uses profj
 based on code from Ben Lerner
 
+To use:
+@(require java/code)
+@java{2 + 2}
+@java-block{
+public static void main(){
+  String hello = "Hello!";
+  return;
+}
+}

@@ -6,7 +6,7 @@
 
 (require scribble/core)
 (require profj/parsers/lexer)
- 
+
 (define (java-read in)
   (syntax->datum (java-read-syntax #f in)))
 
@@ -34,7 +34,7 @@
                   [else (make-style "profj-identifier" (list 'tt-chars))]))]
              [else (make-style (format "profj-~a" type) (list 'tt-chars))])))
       (make-element style str))))
-                    
+
 (define (get-color-lexer in)
   (let-values ([(lexeme type data start end) (get-syntax-token in)])
     (values lexeme
@@ -47,5 +47,5 @@
   (case key
     [(color-lexer)
      get-color-lexer]
-    [else 
+    [else
      (default-filter key default)]))

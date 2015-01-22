@@ -18,30 +18,29 @@
                        type
                        (list src #f #f start (- end start))))))
 
-(define (type->style type)
-  (lambda (str)
-    (let ((style
-           (case type
-             [(identifier)
-              (let [(first-char (string-ref str 0))]
-                (cond
-                  [(char=? first-char #\I)
-                   (make-style "profj-type" (list 'tt-chars))]
-                  [(and (> (string-length str) 1) (string=? str (string-upcase str)))
-                   (make-style "profj-constant" (list 'tt-chars))]
-                  [(and (char>=? first-char #\A) (char<=? first-char #\Z))
-                   (make-style "profj-type" (list 'tt-chars))]
-                  [else (make-style "profj-identifier" (list 'tt-chars))]))]
-             [else (make-style (format "profj-~a" type) (list 'tt-chars))])))
-      (make-element style str))))
+;; convert profj types to racket-lexer types
+(define (convert-type type lexeme)
+  (case type
+    [(profj-type profj-prim-type)        'symbol]
+    [(profj-string)                      'string]
+    [(profj-literal literal)             'constant]
+    [(profj-constant)                    'symbol]
+    [(profj-comment profj-block-comment) 'comment]
+    [(default)                           'parenthesis] ; includes semi
+    [(profj-keyword keyword)
+     ;; includes both keywords like `static` and parentheses, etc.
+     (if (regexp-match #px"[[:alpha:]]" lexeme)
+         'symbol
+         'parenthesis)]
+    [else type]))
 
 (define (get-color-lexer in)
   (let-values ([(lexeme type data start end) (get-syntax-token in)])
     (values lexeme
-            (if (or (eq? type 'newline) (eq? type 'eof))
-                type
-                (type->style type))
-            data start end)))
+            (convert-type type lexeme)
+            data
+            start
+            end)))
 
 (define (java-get-info key default default-filter)
   (case key

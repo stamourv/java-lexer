@@ -4,7 +4,7 @@ based on code from Ben Lerner
 can also do JavaScript in a pinch
 
 To use:
-@(require java/code)
+@(require java-lexer)
 @java{2 + 2}
 @java-block{
 public static void main(){

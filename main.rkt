@@ -4,7 +4,7 @@
 
 (provide (all-defined-out))
 
-;; from Ben Lerner. depends on the `java` collection, which wraps profj stuff
+;; from Ben Lerner
 (define-syntax-rule (java-block arg args ...)
   (codeblock #:keep-lang-line? #f #:context #'arg "#lang java-lexer\n" arg args ...))
 (define-syntax-rule (java arg args ...)
